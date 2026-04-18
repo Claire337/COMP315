@@ -20,19 +20,19 @@ type BasketItem = {
 }
 
 function App() {
-  // Products loaded from public/Assets
+  // Load products from public/Assets
   const [products, setProducts] = useState<Product[]>([])
 
-  // Search / filter / sort controls
+  // Search / sort / filter
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [sortOption, setSortOption] = useState<string>('AtoZ')
   const [inStockOnly, setInStockOnly] = useState<boolean>(false)
 
-  // Basket state
+  // Basket
   const [basketOpen, setBasketOpen] = useState<boolean>(false)
   const [basket, setBasket] = useState<BasketItem[]>([])
 
-  // Load products JSON once on mount
+  // Fetch JSON once
   useEffect(() => {
     fetch('/Assets/random_products_175.json')
       .then((res) => res.json())
@@ -40,7 +40,7 @@ function App() {
       .catch(() => setProducts([]))
   }, [])
 
-  // Build displayed product list: search -> inStock -> sort
+  // Search -> inStock -> sort
   const displayedProducts = useMemo(() => {
     const term = searchTerm.trim().toLowerCase()
 
@@ -83,7 +83,7 @@ function App() {
     return m === 1 ? '1 Result' : `${m} Results`
   }, [searchTerm, products.length, displayedProducts.length])
 
-  // Basket: add
+  // Basket add
   function addToBasket(product: Product) {
     setBasket((prev) => {
       const existing = prev.find((x) => x.id === product.id)
@@ -99,7 +99,7 @@ function App() {
     })
   }
 
-  // Basket: remove 1 (remove row when quantity hits 0)
+  // Basket remove 1 (remove row if hits 0)
   function removeFromBasket(productId: number) {
     setBasket((prev) => {
       const target = prev.find((x) => x.id === productId)
@@ -115,7 +115,7 @@ function App() {
     })
   }
 
-  // Total cost
+  // Total
   const totalCost = useMemo(() => {
     return basket.reduce((sum, item) => sum + item.price * item.quantity, 0)
   }, [basket])
@@ -124,7 +124,8 @@ function App() {
     <div id="container">
       <div id="logo-bar">
         <div id="logo-area">
-          <img src="/Assets/logo.png"></img>
+          {/* Note: file is Logo.png (capital L) */}
+          <img src="/Assets/Logo.png"></img>
         </div>
 
         <div id="shopping-icon-area">
@@ -135,7 +136,10 @@ function App() {
           ></img>
         </div>
 
-        <div id="shopping-area" style={{ display: basketOpen ? 'block' : 'none' }}>
+        <div
+          id="shopping-area"
+          style={{ display: basketOpen ? 'block' : 'none' }}
+        >
           <div id="exit-area">
             <p id="exit-icon" onClick={() => setBasketOpen(false)}>
               x
@@ -170,7 +174,10 @@ function App() {
         ></input>
 
         <div id="control-area">
-          <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+          >
             <option value="AtoZ">By name (A - Z)</option>
             <option value="ZtoA">By name (Z - A)</option>
             <option value="£LtoH">By price (low - high)</option>

@@ -26,7 +26,7 @@ export const ProductList = (props: ContentAreaProps) => {
 							<p> £{item.price.toFixed(2)} ({item.rating}/5)</p>
 						</div>
 
-						<img src={"/Product_Images/" + item.image_link}></img>
+						<img src={'/Assets/Product_Images/' + encodeURI(item.image_link)}></img>
 
 						<button
 							disabled={outOfStock}
